@@ -12,7 +12,7 @@ python scaffold.py
 
 - [x] **1.** rms_norm
 - [x] **2.** causal_self_attention
-- [ ] **3.** gelu_ffn
+- [x] **3.** gelu_ffn
 - [ ] **4.** pre_norm_block
 - [ ] **5.** embed_tokens
 - [ ] **6.** run_layers

@@ -26,8 +26,13 @@ def causal_self_attention(x, w_q, w_k, w_v, w_o):
     attn = torch.softmax(scores, dim=-1)
     return (attn @ V) @ w_o
 
-# Step 3 - gelu_ffn (not yet solved)
-# TODO: implement
+# Step 3 - gelu_ffn
+def gelu_ffn(x, w_ff1, w_ff2):
+    """Apply a two-layer position-wise GELU feed-forward that expands to 4D then projects back to D."""
+    # TODO: Apply a two-layer position-wise GELU FFN that expands to 4D then back to D...
+    out = x @ w_ff1 
+    out = torch.nn.functional.gelu(out)
+    return out @ w_ff2
 
 # Step 4 - pre_norm_block (not yet solved)
 # TODO: implement
