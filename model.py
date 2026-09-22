@@ -223,8 +223,20 @@ def scalar_mix_mlp(concat_sd, mixer):
     out = torch.sigmoid(out @ mixer["w_out"] + mixer["b_out"])
     return out[..., 0:1], out[..., 1:2]
 
-# Step 22 - vector_mix_mlp (not yet solved)
-# TODO: implement
+# Step 22 - vector_mix_mlp
+def vector_mix_mlp(concat_sd, mixer):
+    """Map concat(s, d) through a LayerNorm-GELU MLP to vector mixture coefficients of length D."""
+    # TODO: Implement vector_mix_mlp to produce a pair of vector-valued mixture coefficients...
+    x = concat_sd
+    x = torch.nn.functional.layer_norm(x, (x.shape[-1],), mixer['ln_weight'], mixer['ln_bias'], 1e-5)
+    x = x @ mixer['w1'] + mixer['b1'] 
+    x = torch.nn.functional.gelu(x)
+    x = x @ mixer['w2'] + mixer['b2'] 
+    x = torch.nn.functional.gelu(x)
+    x = x @ mixer["w_out"] + mixer["b_out"]
+    x = torch.sigmoid(x)
+    D = x.shape[-1] // 2
+    return x[..., :D], x[..., D:]
 
 # Step 23 - hadamard_mix (not yet solved)
 # TODO: implement
