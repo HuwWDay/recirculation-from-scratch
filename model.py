@@ -181,7 +181,7 @@ def insert_loop(blocks, l1, l2):
 def run_looped(x, blocks, l1, l2):
     """Run a looped stack and return the final residual."""
     newblock = insert_loop(blocks, l1, l2)
-    return run_layers(x, newblock)
+    return run_layers(x, newblock)[-1]
 
 # Step 17 - tied_lm_head (not yet solved)
 # TODO: implement
