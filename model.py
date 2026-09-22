@@ -166,8 +166,14 @@ def sequential_prefill(embeddings, blocks, source_layer, dest_layer, alpha, ramp
 
     return residuals
 
-# Step 15 - insert_loop (not yet solved)
-# TODO: implement
+# Step 15 - insert_loop
+def insert_loop(blocks, l1, l2):
+    """Insert a looped copy of blocks from l1+1 through l2 immediately after block l2."""
+    # TODO: Build a new block list with one extra pass over layers l1+1 through l2.
+    seg = blocks[l1+1:l2+1]
+    pref = blocks[:l2+1]
+    suff = blocks[l2+1:]
+    return pref+seg+suff
 
 # Step 16 - run_looped (not yet solved)
 # TODO: implement
