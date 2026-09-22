@@ -62,12 +62,14 @@ def embed_tokens(tokens, embedding_weight):
     return torch.nn.functional.embedding(tokens, embedding_weight)
 
 # Step 6 - run_layers
+import torch
+
 def run_layers(x, blocks):
-    """Return residual streams after every layer including the embedding as index 0."""
+    """Return residual streams after every layer as a stacked tensor."""
     out = [x]
     for block in blocks:
         out.append(pre_norm_block(out[-1], block))
-    return out
+    return torch.stack(out, dim=0)
 
 # Step 7 - last_axis_l2
 def last_axis_l2(x):
@@ -175,8 +177,11 @@ def insert_loop(blocks, l1, l2):
     suff = blocks[l2+1:]
     return pref+seg+suff
 
-# Step 16 - run_looped (not yet solved)
-# TODO: implement
+# Step 16 - run_looped
+def run_looped(x, blocks, l1, l2):
+    """Run a looped stack and return the final residual."""
+    newblock = insert_loop(blocks, l1, l2)
+    return run_layers(x, newblock)
 
 # Step 17 - tied_lm_head (not yet solved)
 # TODO: implement

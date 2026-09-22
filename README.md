@@ -25,7 +25,7 @@ python scaffold.py
 - [x] **13.** ramped_alpha
 - [x] **14.** sequential_prefill
 - [x] **15.** insert_loop
-- [ ] **16.** run_looped
+- [x] **16.** run_looped
 - [ ] **17.** tied_lm_head
 - [ ] **18.** ntp_loss
 - [ ] **19.** perplexity
