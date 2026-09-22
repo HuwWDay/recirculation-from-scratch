@@ -36,7 +36,7 @@ python scaffold.py
 - [x] **24.** adaptive_recirculate
 - [x] **25.** blockwise_recirculate
 - [x] **26.** lag_diagnostic
-- [ ] **27.** frozen_stack_adaptive_demo
+- [x] **27.** frozen_stack_adaptive_demo
 
 ---
 

@@ -330,6 +330,80 @@ def lag_diagnostic(embeddings, tokens, blocks, embedding_weight, t, k, source_la
 
     return delta_ll
 
-# Step 27 - frozen_stack_adaptive_demo (not yet solved)
-# TODO: implement
+# Step 27 - frozen_stack_adaptive_demo
+import torch
+
+def frozen_stack_adaptive_demo(tokens, embedding_weight, blocks, mixer, source_layer, dest_layer, alpha, steps, lr, seed=0):
+    """Frozen-stack demo: baseline vs fixed recirc vs trained adaptive NTP."""
+    torch.manual_seed(seed)
+
+    # 1. Freeze base model parameters
+    if isinstance(embedding_weight, torch.Tensor):
+        embedding_weight.requires_grad_(False)
+    for block in blocks:
+        if isinstance(block, dict):
+            for v in block.values():
+                if isinstance(v, torch.Tensor):
+                    v.requires_grad_(False)
+
+    # Embeddings
+    embeddings = embed_tokens(tokens, embedding_weight)
+
+    # 2. Baseline NTP Loss (No Recirculation)
+    base_res = run_layers(embeddings, blocks)
+    h_base = base_res[-1]
+    logits_base = tied_lm_head(h_base, embedding_weight)
+    baseline_loss = ntp_loss(logits_base, tokens)
+
+    # 3. Fixed Recirculation NTP Loss (sequential_prefill)
+    fixed_res = sequential_prefill(embeddings, blocks, source_layer, dest_layer, alpha)
+    h_fixed = fixed_res[-1]
+    logits_fixed = tied_lm_head(h_fixed, embedding_weight)
+    fixed_loss = ntp_loss(logits_fixed, tokens)
+
+    # 4. Prepare mixer parameters IN-PLACE for optimization
+    trainable_params = []
+    for k, v in mixer.items():
+        if isinstance(v, torch.Tensor) and v.is_floating_point():
+            v.requires_grad_(True)
+            trainable_params.append(v)
+
+    optimizer = torch.optim.SGD(trainable_params, lr=lr)
+
+    def forward_adaptive():
+        """Full sequence forward pass with adaptive recirculation."""
+        res = [r.clone() for r in run_layers(embeddings, blocks)]
+
+        s = res[source_layer]
+        d = res[dest_layer]
+
+        # Token-conditional adaptive mix at the destination layer
+        mixed_d = adaptive_recirculate(s, d, mixer)
+        res[dest_layer] = mixed_d
+
+        # Re-run from dest_layer to top
+        curr = mixed_d
+        for i, block in enumerate(blocks[dest_layer:], start=dest_layer + 1):
+            curr = pre_norm_block(curr, block)
+            if i < len(res):
+                res[i] = curr
+            else:
+                res.append(curr)
+
+        h_out = res[-1]
+        logits = tied_lm_head(h_out, embedding_weight)
+        return ntp_loss(logits, tokens)
+
+    # 5. Train mixer in-place for `steps` iterations
+    for _ in range(steps):
+        optimizer.zero_grad()
+        loss = forward_adaptive()
+        loss.backward()
+        optimizer.step()
+
+    # 6. Final evaluation
+    with torch.no_grad():
+        adaptive_loss = forward_adaptive()
+
+    return baseline_loss.detach(), fixed_loss.detach(), adaptive_loss.detach()
 
