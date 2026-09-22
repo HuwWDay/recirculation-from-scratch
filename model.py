@@ -251,8 +251,38 @@ def adaptive_recirculate(s, d, mixer):
     alpha, beta = vector_mix_mlp(conc, mixer)
     return hadamard_mix(s, d, alpha, beta)
 
-# Step 25 - blockwise_recirculate (not yet solved)
-# TODO: implement
+# Step 25 - blockwise_recirculate
+def blockwise_recirculate(embeddings, blocks, source_layer, dest_layer, alpha, block_size):
+    """First-pass then mix K positions at a time and continue from dest."""
+    B, T, D = embeddings.shape
+    
+    # 1. First-pass over the entire sequence
+    residuals = run_layers(embeddings, blocks)
+    # Ensure list representation and avoid in-place mutation of embeddings
+    residuals = [r.clone() for r in residuals]
+
+    # 2. Iterate in contiguous chunks of size block_size
+    for start in range(0, T, block_size):
+        end = min(start + block_size, T)
+
+        # Extract the chunk at source and destination layers
+        s = residuals[source_layer][:, start:end]
+        d = residuals[dest_layer][:, start:end]
+
+        # Match source norm to dest norm, then mix
+        s_matched = match_source_norm(s, d)
+        mixed = convex_mix(s_matched, d, alpha)
+
+        # Update the destination layer slice
+        residuals[dest_layer][:, start:end] = mixed
+
+        # Re-run all downstream blocks starting from dest_layer
+        curr = residuals[dest_layer]
+        for i, block in enumerate(blocks[dest_layer:], start=dest_layer + 1):
+            curr = pre_norm_block(curr, block)
+            residuals[i] = curr
+
+    return residuals
 
 # Step 26 - lag_diagnostic (not yet solved)
 # TODO: implement
