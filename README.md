@@ -23,7 +23,7 @@ python scaffold.py
 - [x] **11.** no_normalization_mix
 - [x] **12.** recirculate_one_position
 - [x] **13.** ramped_alpha
-- [ ] **14.** sequential_prefill
+- [x] **14.** sequential_prefill
 - [ ] **15.** insert_loop
 - [ ] **16.** run_looped
 - [ ] **17.** tied_lm_head

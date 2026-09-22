@@ -136,8 +136,35 @@ def ramped_alpha(t, alpha, ramp_steps=10):
     # TODO: Compute the ramped mixture coefficient for a 0-indexed token position t...
     return min(t/ramp_steps, 1)*alpha
 
-# Step 14 - sequential_prefill (not yet solved)
-# TODO: implement
+# Step 14 - sequential_prefill
+def sequential_prefill(embeddings, blocks, source_layer, dest_layer, alpha, ramp_steps=10):
+    """Token-by-token recirculation prefill with ramped alpha."""
+    B, T, D = embeddings.shape
+    residuals = None
+
+    for t in range(T):
+        # 1. First-pass forward, cloning so in-place slice writes don't mutate input embeddings
+        prefix_residuals = [r.clone() for r in run_layers(embeddings[:, :t + 1], blocks)]
+
+        # 2. Write previously recirculated residuals back onto positions 0 .. t-1
+        if t > 0:
+            for l in range(len(prefix_residuals)):
+                prefix_residuals[l][:, :t] = residuals[l][:, :t]
+
+        # 3. Compute the ramped mixing parameter for step t
+        current_alpha = ramped_alpha(t, alpha, ramp_steps)
+
+        # 4. Recirculate at time t and re-run forward from dest_layer onward
+        residuals = recirculate_one_position(
+            prefix_residuals,
+            t,
+            source_layer,
+            dest_layer,
+            current_alpha,
+            blocks
+        )
+
+    return residuals
 
 # Step 15 - insert_loop (not yet solved)
 # TODO: implement
