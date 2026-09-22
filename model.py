@@ -61,8 +61,13 @@ def embed_tokens(tokens, embedding_weight):
     # TODO: Implement embed_tokens to produce a residual-stream vector for every token id.
     return torch.nn.functional.embedding(tokens, embedding_weight)
 
-# Step 6 - run_layers (not yet solved)
-# TODO: implement
+# Step 6 - run_layers
+def run_layers(x, blocks):
+    """Return residual streams after every layer including the embedding as index 0."""
+    out = [x]
+    for block in blocks:
+        out.append(pre_norm_block(out[-1], block))
+    return out
 
 # Step 7 - last_axis_l2 (not yet solved)
 # TODO: implement

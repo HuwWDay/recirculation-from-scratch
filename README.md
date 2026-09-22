@@ -15,7 +15,7 @@ python scaffold.py
 - [x] **3.** gelu_ffn
 - [x] **4.** pre_norm_block
 - [x] **5.** embed_tokens
-- [ ] **6.** run_layers
+- [x] **6.** run_layers
 - [ ] **7.** last_axis_l2
 - [ ] **8.** match_source_norm
 - [ ] **9.** convex_mix
