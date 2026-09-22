@@ -34,8 +34,26 @@ def gelu_ffn(x, w_ff1, w_ff2):
     out = torch.nn.functional.gelu(out)
     return out @ w_ff2
 
-# Step 4 - pre_norm_block (not yet solved)
-# TODO: implement
+# Step 4 - pre_norm_block
+def pre_norm_block(x, block):
+    """Wrap attention and feed-forward as a pre-norm residual transformer block."""
+    # 1. Pre-norm self-attention sub-layer with residual connection
+    norm_attn = rms_norm(x, block["attn_gain"])
+    attn_out = causal_self_attention(
+        norm_attn, 
+        block["w_q"], 
+        block["w_k"], 
+        block["w_v"], 
+        block["w_o"]
+    )
+    x = x + attn_out
+
+    # 2. Pre-norm feed-forward sub-layer with residual connection
+    norm_ffn = rms_norm(x, block["ffn_gain"])
+    ffn_out = gelu_ffn(norm_ffn, block["w_ff1"], block["w_ff2"])
+    x = x + ffn_out
+
+    return x
 
 # Step 5 - embed_tokens (not yet solved)
 # TODO: implement
