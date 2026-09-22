@@ -86,8 +86,11 @@ def match_source_norm(s, d):
     scale = torch.where(norm_s == 0, torch.zeros_like(norm_s), norm_d / norm_s)
     return s * scale
 
-# Step 9 - convex_mix (not yet solved)
-# TODO: implement
+# Step 9 - convex_mix
+def convex_mix(s, d, alpha):
+    """Convex mix of destination with a magnitude-matched source."""
+    s = match_source_norm(s, d)
+    return (1-alpha)*d+alpha*s
 
 # Step 10 - nonconvex_mix (not yet solved)
 # TODO: implement
