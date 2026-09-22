@@ -190,8 +190,13 @@ def tied_lm_head(h, embedding_weight):
     embed_weight_t = embedding_weight.transpose(0, 1)
     return h @ embed_weight_t
 
-# Step 18 - ntp_loss (not yet solved)
-# TODO: implement
+# Step 18 - ntp_loss
+def ntp_loss(logits, tokens):
+    # TODO: Compute mean next-token-prediction cross-entropy of shifted (B, T, V) logits...
+    B, T, V = logits.shape
+    inp = logits[:, :-1, :].reshape(-1, V)
+    target = tokens[:, 1:].reshape(-1)
+    return torch.nn.functional.cross_entropy(inp, target)
 
 # Step 19 - perplexity (not yet solved)
 # TODO: implement
