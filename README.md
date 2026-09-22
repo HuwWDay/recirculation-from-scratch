@@ -35,7 +35,7 @@ python scaffold.py
 - [x] **23.** hadamard_mix
 - [x] **24.** adaptive_recirculate
 - [x] **25.** blockwise_recirculate
-- [ ] **26.** lag_diagnostic
+- [x] **26.** lag_diagnostic
 - [ ] **27.** frozen_stack_adaptive_demo
 
 ---

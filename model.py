@@ -284,8 +284,51 @@ def blockwise_recirculate(embeddings, blocks, source_layer, dest_layer, alpha, b
 
     return residuals
 
-# Step 26 - lag_diagnostic (not yet solved)
-# TODO: implement
+# Step 26 - lag_diagnostic
+import torch
+import torch.nn.functional as F
+
+def lag_diagnostic(embeddings, tokens, blocks, embedding_weight, t, k, source_layer, dest_layer, alpha):
+    """Change in next-token log-likelihood at lag k after recirculating position t."""
+    # 1. Baseline forward pass with no recirculation
+    baseline_residuals = run_layers(embeddings, blocks)
+    # Ensure clone to prevent in-place aliasing
+    baseline_residuals = [r.clone() for r in baseline_residuals]
+
+    # 2. Recirculate at position t
+    recirc_residuals = recirculate_one_position(
+        baseline_residuals,
+        t,
+        source_layer,
+        dest_layer,
+        alpha,
+        blocks
+    )
+
+    # 3. Position evaluated and target token index
+    eval_pos = t + k
+    target_tokens = tokens[:, eval_pos + 1].unsqueeze(-1)  # shape: (B, 1)
+
+    # 4. Final residual states at position t+k: (B, 1, D)
+    h_baseline = baseline_residuals[-1][:, eval_pos:eval_pos + 1]
+    h_recirc = recirc_residuals[-1][:, eval_pos:eval_pos + 1]
+
+    # 5. Project through tied LM head to obtain logits: (B, 1, V)
+    logits_baseline = tied_lm_head(h_baseline, embedding_weight)
+    logits_recirc = tied_lm_head(h_recirc, embedding_weight)
+
+    # 6. Compute log-probabilities across vocabulary: (B, 1, V)
+    log_probs_baseline = F.log_softmax(logits_baseline, dim=-1)
+    log_probs_recirc = F.log_softmax(logits_recirc, dim=-1)
+
+    # 7. Gather log-likelihood of target tokens: (B, 1)
+    nll_baseline = log_probs_baseline.squeeze(1).gather(dim=-1, index=target_tokens)
+    nll_recirc = log_probs_recirc.squeeze(1).gather(dim=-1, index=target_tokens)
+
+    # 8. Mean change in log-likelihood (recirc - baseline)
+    delta_ll = (nll_recirc - nll_baseline).mean()
+
+    return delta_ll
 
 # Step 27 - frozen_stack_adaptive_demo (not yet solved)
 # TODO: implement
