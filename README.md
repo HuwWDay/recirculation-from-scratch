@@ -21,7 +21,7 @@ python scaffold.py
 - [x] **9.** convex_mix
 - [x] **10.** nonconvex_mix
 - [x] **11.** no_normalization_mix
-- [ ] **12.** recirculate_one_position
+- [x] **12.** recirculate_one_position
 - [ ] **13.** ramped_alpha
 - [ ] **14.** sequential_prefill
 - [ ] **15.** insert_loop

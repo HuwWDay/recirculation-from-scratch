@@ -104,8 +104,31 @@ def no_normalization_mix(s, d, alpha):
     # TODO: Mix source into destination with no renormalization using the raw source.
     return (1-alpha)*d + alpha*s
 
-# Step 12 - recirculate_one_position (not yet solved)
-# TODO: implement
+# Step 12 - recirculate_one_position
+def recirculate_one_position(residuals, t, source_layer, dest_layer, alpha, blocks):
+    """Mix source into dest at time t then re-run blocks from dest onward."""
+    s = residuals[source_layer][:, t]
+    d = residuals[dest_layer][:, t]
+    mix = convex_mix(s, d, alpha)
+
+    # Clone the target residual and inject the mixed representation at position t
+    x = residuals[dest_layer].clone()
+    x[:, t] = mix
+
+    # Start with a copy of all original residuals so shape and untruncated layers are preserved
+    new_residuals = list(residuals)
+    new_residuals[dest_layer] = x
+
+    # Re-run the subsequent blocks, updating new_residuals from dest_layer + 1 onward
+    curr = x
+    for i, block in enumerate(blocks[dest_layer:], start=dest_layer + 1):
+        curr = pre_norm_block(curr, block)
+        if i < len(new_residuals):
+            new_residuals[i] = curr
+        else:
+            new_residuals.append(curr)
+
+    return new_residuals
 
 # Step 13 - ramped_alpha (not yet solved)
 # TODO: implement
