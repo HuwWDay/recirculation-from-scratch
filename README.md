@@ -30,7 +30,7 @@ python scaffold.py
 - [x] **18.** ntp_loss
 - [x] **19.** perplexity
 - [x] **20.** concat_residuals
-- [ ] **21.** scalar_mix_mlp
+- [x] **21.** scalar_mix_mlp
 - [ ] **22.** vector_mix_mlp
 - [ ] **23.** hadamard_mix
 - [ ] **24.** adaptive_recirculate

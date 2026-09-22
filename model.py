@@ -213,8 +213,15 @@ def concat_residuals(s, d):
     # TODO: Concatenate source and destination residuals along the last axis...
     return torch.cat([s, d], dim=-1)
 
-# Step 21 - scalar_mix_mlp (not yet solved)
-# TODO: implement
+# Step 21 - scalar_mix_mlp
+def scalar_mix_mlp(concat_sd, mixer):
+    """Produce scalar mixture coefficients (alpha, beta) from a concatenated residual."""
+    # TODO: Produce scalar mixture coefficients (alpha, beta) from a concatenated residual.
+    out = torch.nn.functional.layer_norm(concat_sd, (concat_sd.shape[-1],), weight=mixer['ln_weight'], bias=mixer['ln_bias'], eps=1e-5)
+    out = torch.nn.functional.gelu(out @ mixer['w1'] + mixer['b1'])
+    out = torch.nn.functional.gelu(out @ mixer['w2'] + mixer['b2'])
+    out = torch.sigmoid(out @ mixer["w_out"] + mixer["b_out"])
+    return out[..., 0:1], out[..., 1:2]
 
 # Step 22 - vector_mix_mlp (not yet solved)
 # TODO: implement
