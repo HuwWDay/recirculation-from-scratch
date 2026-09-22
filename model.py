@@ -55,8 +55,11 @@ def pre_norm_block(x, block):
 
     return x
 
-# Step 5 - embed_tokens (not yet solved)
-# TODO: implement
+# Step 5 - embed_tokens
+def embed_tokens(tokens, embedding_weight):
+    """Embed token ids with a (V, D) table."""
+    # TODO: Implement embed_tokens to produce a residual-stream vector for every token id.
+    return torch.nn.functional.embedding(tokens, embedding_weight)
 
 # Step 6 - run_layers (not yet solved)
 # TODO: implement
