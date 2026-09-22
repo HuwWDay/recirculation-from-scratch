@@ -198,8 +198,14 @@ def ntp_loss(logits, tokens):
     target = tokens[:, 1:].reshape(-1)
     return torch.nn.functional.cross_entropy(inp, target)
 
-# Step 19 - perplexity (not yet solved)
-# TODO: implement
+# Step 19 - perplexity
+def perplexity(loss):
+    """Return exp(loss) for a scalar or tensor NTP cross-entropy."""
+    # TODO: Compute the exponential of a next-token-prediction cross-entropy loss...
+    if torch.is_tensor(loss):
+        return torch.exp(loss)
+    else:
+        return math.exp(loss)
 
 # Step 20 - concat_residuals (not yet solved)
 # TODO: implement

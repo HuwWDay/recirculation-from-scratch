@@ -28,7 +28,7 @@ python scaffold.py
 - [x] **16.** run_looped
 - [x] **17.** tied_lm_head
 - [x] **18.** ntp_loss
-- [ ] **19.** perplexity
+- [x] **19.** perplexity
 - [ ] **20.** concat_residuals
 - [ ] **21.** scalar_mix_mlp
 - [ ] **22.** vector_mix_mlp
