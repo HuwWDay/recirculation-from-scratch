@@ -33,7 +33,7 @@ python scaffold.py
 - [x] **21.** scalar_mix_mlp
 - [x] **22.** vector_mix_mlp
 - [x] **23.** hadamard_mix
-- [ ] **24.** adaptive_recirculate
+- [x] **24.** adaptive_recirculate
 - [ ] **25.** blockwise_recirculate
 - [ ] **26.** lag_diagnostic
 - [ ] **27.** frozen_stack_adaptive_demo

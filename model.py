@@ -244,8 +244,12 @@ def hadamard_mix(s, d, alpha, beta):
     f = match_source_norm(s, d)
     return alpha*f + beta*d
 
-# Step 24 - adaptive_recirculate (not yet solved)
-# TODO: implement
+# Step 24 - adaptive_recirculate
+def adaptive_recirculate(s, d, mixer):
+    """Token-conditional vector mix of matched source into destination."""
+    conc = concat_residuals(s, d)
+    alpha, beta = vector_mix_mlp(conc, mixer)
+    return hadamard_mix(s, d, alpha, beta)
 
 # Step 25 - blockwise_recirculate (not yet solved)
 # TODO: implement
