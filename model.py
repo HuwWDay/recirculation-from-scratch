@@ -183,8 +183,12 @@ def run_looped(x, blocks, l1, l2):
     newblock = insert_loop(blocks, l1, l2)
     return run_layers(x, newblock)[-1]
 
-# Step 17 - tied_lm_head (not yet solved)
-# TODO: implement
+# Step 17 - tied_lm_head
+def tied_lm_head(h, embedding_weight):
+    """Project a residual stream to vocabulary logits with a tied embedding table."""
+    # TODO: Project a residual stream to vocabulary logits with a tied embedding...
+    embed_weight_t = embedding_weight.transpose(0, 1)
+    return h @ embed_weight_t
 
 # Step 18 - ntp_loss (not yet solved)
 # TODO: implement
