@@ -238,8 +238,11 @@ def vector_mix_mlp(concat_sd, mixer):
     D = x.shape[-1] // 2
     return x[..., :D], x[..., D:]
 
-# Step 23 - hadamard_mix (not yet solved)
-# TODO: implement
+# Step 23 - hadamard_mix
+def hadamard_mix(s, d, alpha, beta):
+    """Hadamard mix of matched source and destination."""
+    f = match_source_norm(s, d)
+    return alpha*f + beta*d
 
 # Step 24 - adaptive_recirculate (not yet solved)
 # TODO: implement
