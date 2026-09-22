@@ -130,8 +130,11 @@ def recirculate_one_position(residuals, t, source_layer, dest_layer, alpha, bloc
 
     return new_residuals
 
-# Step 13 - ramped_alpha (not yet solved)
-# TODO: implement
+# Step 13 - ramped_alpha
+def ramped_alpha(t, alpha, ramp_steps=10):
+    """Compute the ramped mixture coefficient for a 0-indexed token position t."""
+    # TODO: Compute the ramped mixture coefficient for a 0-indexed token position t...
+    return min(t/ramp_steps, 1)*alpha
 
 # Step 14 - sequential_prefill (not yet solved)
 # TODO: implement
