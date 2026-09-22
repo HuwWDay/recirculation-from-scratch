@@ -20,7 +20,7 @@ python scaffold.py
 - [x] **8.** match_source_norm
 - [x] **9.** convex_mix
 - [x] **10.** nonconvex_mix
-- [ ] **11.** no_normalization_mix
+- [x] **11.** no_normalization_mix
 - [ ] **12.** recirculate_one_position
 - [ ] **13.** ramped_alpha
 - [ ] **14.** sequential_prefill

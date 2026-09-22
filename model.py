@@ -98,8 +98,11 @@ def nonconvex_mix(s, d, alpha):
     s = match_source_norm(s, d)
     return d+alpha*s
 
-# Step 11 - no_normalization_mix (not yet solved)
-# TODO: implement
+# Step 11 - no_normalization_mix
+def no_normalization_mix(s, d, alpha):
+    """Mix source into destination with no renormalization using the raw source."""
+    # TODO: Mix source into destination with no renormalization using the raw source.
+    return (1-alpha)*d + alpha*s
 
 # Step 12 - recirculate_one_position (not yet solved)
 # TODO: implement
