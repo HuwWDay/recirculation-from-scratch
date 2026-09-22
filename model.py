@@ -207,8 +207,11 @@ def perplexity(loss):
     else:
         return math.exp(loss)
 
-# Step 20 - concat_residuals (not yet solved)
-# TODO: implement
+# Step 20 - concat_residuals
+def concat_residuals(s, d):
+    """Concatenate source and destination residuals along the last axis."""
+    # TODO: Concatenate source and destination residuals along the last axis...
+    return torch.cat([s, d], dim=-1)
 
 # Step 21 - scalar_mix_mlp (not yet solved)
 # TODO: implement
