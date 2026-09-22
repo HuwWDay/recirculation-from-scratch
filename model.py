@@ -14,8 +14,17 @@ def rms_norm(x, gain, eps=1e-6):
     rms = torch.sqrt(avg + eps)
     return (x / rms)*gain
 
-# Step 2 - causal_self_attention (not yet solved)
-# TODO: implement
+# Step 2 - causal_self_attention
+def causal_self_attention(x, w_q, w_k, w_v, w_o):
+    """Compute single-head causal scaled-dot-product attention."""
+    # TODO: Compute single-head causal scaled-dot-product attention...
+    B, T, D = x.shape
+    Q, K, V = x @ w_q, x @ w_k, x @ w_v 
+    scores = (Q @ K.transpose(-2, -1)) / D**0.5
+    mask = torch.triu(torch.ones(T, T, dtype=torch.bool, device=x.device), diagonal=1)
+    scores = scores.masked_fill(mask, float("-inf"))
+    attn = torch.softmax(scores, dim=-1)
+    return (attn @ V) @ w_o
 
 # Step 3 - gelu_ffn (not yet solved)
 # TODO: implement

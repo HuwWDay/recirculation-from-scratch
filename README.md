@@ -11,7 +11,7 @@ python scaffold.py
 ## Steps
 
 - [x] **1.** rms_norm
-- [ ] **2.** causal_self_attention
+- [x] **2.** causal_self_attention
 - [ ] **3.** gelu_ffn
 - [ ] **4.** pre_norm_block
 - [ ] **5.** embed_tokens
