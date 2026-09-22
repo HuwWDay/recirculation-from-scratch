@@ -69,8 +69,11 @@ def run_layers(x, blocks):
         out.append(pre_norm_block(out[-1], block))
     return out
 
-# Step 7 - last_axis_l2 (not yet solved)
-# TODO: implement
+# Step 7 - last_axis_l2
+def last_axis_l2(x):
+    """Return last-axis L2 norms of x with a kept singleton dimension."""
+    # TODO: Compute the L2 norm of a tensor over its last axis keeping that axis as a singleton.
+    return torch.linalg.norm(x, dim=-1, keepdim=True)
 
 # Step 8 - match_source_norm (not yet solved)
 # TODO: implement
