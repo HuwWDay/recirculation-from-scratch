@@ -17,7 +17,7 @@ python scaffold.py
 - [x] **5.** embed_tokens
 - [x] **6.** run_layers
 - [x] **7.** last_axis_l2
-- [ ] **8.** match_source_norm
+- [x] **8.** match_source_norm
 - [ ] **9.** convex_mix
 - [ ] **10.** nonconvex_mix
 - [ ] **11.** no_normalization_mix

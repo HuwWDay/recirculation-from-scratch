@@ -75,8 +75,16 @@ def last_axis_l2(x):
     # TODO: Compute the L2 norm of a tensor over its last axis keeping that axis as a singleton.
     return torch.linalg.norm(x, dim=-1, keepdim=True)
 
-# Step 8 - match_source_norm (not yet solved)
-# TODO: implement
+# Step 8 - match_source_norm
+def match_source_norm(s, d):
+    """Rescale s so its last-axis L2 matches d."""
+    # Ensure keepdim=True so dimensions broadcast cleanly with s: (..., 1)
+    norm_s = last_axis_l2(s)
+    norm_d = last_axis_l2(d)
+
+    # Elementwise condition: where s norm is 0, scale factor is 0
+    scale = torch.where(norm_s == 0, torch.zeros_like(norm_s), norm_d / norm_s)
+    return s * scale
 
 # Step 9 - convex_mix (not yet solved)
 # TODO: implement
