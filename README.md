@@ -19,7 +19,7 @@ python scaffold.py
 - [x] **7.** last_axis_l2
 - [x] **8.** match_source_norm
 - [x] **9.** convex_mix
-- [ ] **10.** nonconvex_mix
+- [x] **10.** nonconvex_mix
 - [ ] **11.** no_normalization_mix
 - [ ] **12.** recirculate_one_position
 - [ ] **13.** ramped_alpha

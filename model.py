@@ -92,8 +92,11 @@ def convex_mix(s, d, alpha):
     s = match_source_norm(s, d)
     return (1-alpha)*d+alpha*s
 
-# Step 10 - nonconvex_mix (not yet solved)
-# TODO: implement
+# Step 10 - nonconvex_mix
+def nonconvex_mix(s, d, alpha):
+    """Nonconvex mix: destination plus a scaled matched source."""
+    s = match_source_norm(s, d)
+    return d+alpha*s
 
 # Step 11 - no_normalization_mix (not yet solved)
 # TODO: implement
